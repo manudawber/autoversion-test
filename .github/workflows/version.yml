@@ -19,7 +19,9 @@ jobs:
         uses: mathieudutour/github-tag-action@v5.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_release_rules: major:major:feat, minor:minor:feat
+          release_branches: main
+          pre_release_branches: development,staging
+          custom_release_rules: major:major, minor:minor
 
       - name: Create a GitHub release
         uses: actions/create-release@v1
