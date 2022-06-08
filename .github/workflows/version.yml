@@ -4,11 +4,9 @@ on:
   push:
     branches:
     - development
-    - staging
-    - main
 
 jobs:
-  build:
+  version:
     runs-on: ubuntu-latest
     steps:
     
@@ -16,42 +14,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Bump version and push tag
-      #   id: tag_version
-      #   uses: mathieudutour/github-tag-action@v5.5
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     release_branches: main
-      #     pre_release_branches: development,staging
-      #     custom_release_rules: major:major, minor:minor
-
       - name: Bump version and push tag
         id: version
         uses: mathieudutour/github-tag-action@v5.5
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: main
-          pre_release_branches: staging
+          release_branches: development
           custom_release_rules: major:major, minor:minor
 
-      # - name: Bump version and push tag
-      #   id: version
-      #   uses: anothrNick/github-tag-action@1.36.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     DEFAULT_BUMP: patch
-      #     WITH_V: true
-      #     RELEASE_BRANCHES: main
-
-      # - run: echo ${{ steps.version.outputs.new_tag }}
-      # - run: echo ${{ steps.version.outputs.tag }}
-
-      - name: Create a GitHub release
+      - name: Create GitHub release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.version.outputs.new_tag }}
           release_name: Release ${{ steps.version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-        if: github.ref == 'refs/heads/main'
+          body: ${{ steps.version.outputs.changelog }}
