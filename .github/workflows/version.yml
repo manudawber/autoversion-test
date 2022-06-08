@@ -3,7 +3,9 @@ name: Test Versioning
 on:
   push:
     branches:
-    - master
+    - development
+    - staging
+    - main
 
 jobs:
   build:
